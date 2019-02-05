@@ -12,6 +12,7 @@ class cactus(pygame.sprite.Sprite):
         #Calls the Sprite class constructor.
         #It must be the first line in constructor.
         super().__init__()
+        #Don't forget to add rect and image attributes!
 
     #Changes the cactus's horizontal location
     def move(self):
