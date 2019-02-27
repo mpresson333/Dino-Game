@@ -16,7 +16,7 @@ class trex(pygame.sprite.Sprite):
         self.x = 25
         self.y = ground
         self.image = DINO[0]
-        self.rect = pygame.Rect(self.x, self.y, 15, 15)
+        self.rect = pygame.Rect(self.x, self.y, 40, 40)
         self.counter = 1
 
     #Change the trex's vertical position to above the ground

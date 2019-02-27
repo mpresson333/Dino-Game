@@ -35,17 +35,15 @@ def update_cacti():
         plant.update()
 
 #Updates trex sprite's location and redraws trex image
-def update_rex():
+def update_rex(jumping):
     if jumping:
         rex.move(150)
-    if rex.rect.y == 150:
-        jumping = False
 
 #Starts game over actions
 #Displays an end of game message in a text box
 #Kills trex sprite
 #Creates new game loop to display end game state
-def game_over():
+def game_over2(game_over):
     if game_over:
         DISPLAYSURF.fill((255, 255, 255))
         rex.kill()
@@ -75,8 +73,9 @@ def display_time():
 #If there is a collision, the game is over.
 def is_collision():
     if pygame.sprite.spritecollideany(rex, cacti):
-        game_over = True
-        print("Game over.")
+        return True
+    else:
+        return False
 
 #Increases the FPS by 5 every 100 seconds
 #This is a placeholder for a challenge exercise.
@@ -104,12 +103,19 @@ while True:
                 jumping = True
 
     #Update display
-    update_cacti()
-    is_collision()
-    for plant in cacti:
-        DISPLAYSURF.blit(plant.image, plant.rect)
-    DISPLAYSURF.blit(rex.image, rex.rect)
-    if frame_counter % 75 == 0:
-        add_cacti()
+    game_over2(game_over)
+    if not game_over:
+        update_cacti()
+        update_rex(jumping)
+        if rex.rect.y == 150:
+            jumping = False
+        display_score()
+        increase_FPS()
+        game_over = is_collision()
+        for plant in cacti:
+            DISPLAYSURF.blit(plant.image, plant.rect)
+        DISPLAYSURF.blit(rex.image, rex.rect)
+        if frame_counter % 75 == 0:
+            add_cacti()
     pygame.display.update()
     fpsClock.tick(FPS)
