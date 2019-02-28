@@ -3,6 +3,7 @@ from pygame.locals import *
 #Importing modules from other files
 from trex import trex
 from cactus import cactus
+from cloud import cloud
 
 #Always call before utilizing pygame functions
 pygame.init()
@@ -10,6 +11,8 @@ pygame.init()
 FPS = 40
 fpsClock = pygame.time.Clock()
 frame_counter = 0
+pygame.mixer.music.load('resources/gerudo.mp3')
+pygame.mixer.music.play(-1, 0.0)
 
 DISPLAYSURF = pygame.display.set_mode((400,300), 0, 32)
 #Sets title of GUI frame
@@ -20,11 +23,16 @@ BASICFONT = pygame.font.Font('freesansbold.ttf', 16)
 WHITE = (250, 250, 250)
 rex = trex(150)
 cacti = pygame.sprite.Group()
+clouds = pygame.sprite.Group()
 
 #Adds a new cactus sprite to the list of obstacles
 def add_cacti():
     plant = cactus(120)
     cacti.add(plant)
+
+def add_cloud():
+    x = cloud()
+    clouds.add(x)
 
 #Updates each cactus sprite's location
 #Removes the cactus from sprite group if it's off screen
@@ -34,10 +42,20 @@ def update_cacti():
     for plant in cacti:
         plant.update()
 
+def update_clouds():
+    for y in clouds:
+        y.update()
+
 #Updates trex sprite's location and redraws trex image
 def update_rex(jumping):
     if jumping:
         rex.move(150)
+    if frame_counter % 3 == 0:
+        rex.image = DINO[0]
+    elif frame_counter % 3 == 1:
+        rex.image = DINO[1]
+    elif frame_counter % 3 == 2:
+        rex.image = DINO[2]
 
 #Starts game over actions
 #Displays an end of game message in a text box
@@ -80,12 +98,15 @@ def is_collision():
 #Increases the FPS by 5 every 100 seconds
 #This is a placeholder for a challenge exercise.
 def increase_FPS():
-    if frame_counter % 1000 == 0:
-        FPS += 5
+    if frame_counter % 500 == 0:
+        return FPS + 5
+    else:
+        return FPS
 
 #Main game loop
 jumping = False
 game_over = False
+DINO = [pygame.image.load('resources/dino1.png'), pygame.image.load('resources/dino2.png'), pygame.image.load('resources/dino3.png')]
 while True:
 
     #Fill in background
@@ -102,20 +123,27 @@ while True:
             if event.key == K_SPACE:
                 jumping = True
 
-    #Update display
+    #some functionality
     game_over2(game_over)
     if not game_over:
         update_cacti()
+        update_clouds()
         update_rex(jumping)
         if rex.rect.y == 150:
             jumping = False
-        display_score()
-        increase_FPS()
+        FPS = increase_FPS()
         game_over = is_collision()
-        for plant in cacti:
-            DISPLAYSURF.blit(plant.image, plant.rect)
-        DISPLAYSURF.blit(rex.image, rex.rect)
         if frame_counter % 75 == 0:
             add_cacti()
+        if frame_counter % 500 == 5:
+            add_cloud()
+
+    #Update display
+        for plant in cacti:
+            DISPLAYSURF.blit(plant.image, plant.rect)
+        for x in clouds:
+            DISPLAYSURF.blit(x.image, x.rect)
+        display_score()
+        DISPLAYSURF.blit(rex.image, rex.rect)
     pygame.display.update()
     fpsClock.tick(FPS)

@@ -39,13 +39,3 @@ class trex(pygame.sprite.Sprite):
             self.fall()
         if self.rect.y == ground:
             self.counter = 1
-
-    #Update the trex's game status with regards to movement
-    # and later animation (challenge)
-    def update(self):
-        print
-
-    #Select which frame to display for your sprite
-    #This is a placeholder for a challenge exercise.
-    def animate(self):
-        print
