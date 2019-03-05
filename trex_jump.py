@@ -67,9 +67,15 @@ def game_over2(game_over):
         rex.kill()
         for c in cacti:
             c.kill()
+        for c in clouds:
+            c.kill()
         Surf = BASICFONT.render("GAME OVER", 1, (0,0,0))
         Rect = Surf.get_rect()
         Rect.topleft = (10, 10)
+        DISPLAYSURF.blit(Surf, Rect)
+        Surf = BASICFONT.render("PRESS ENTER TO RESTART", 1, (0,0,0))
+        Rect = Surf.get_rect()
+        Rect.topleft = (150, 150)
         DISPLAYSURF.blit(Surf, Rect)
 
 #Creates a text box with the text provided in location x, y on screen
@@ -113,6 +119,7 @@ while True:
     DISPLAYSURF.fill(WHITE)
     pygame.draw.line(DISPLAYSURF, (0, 0, 0), (0, 190), (400, 190), 2)
     frame_counter += 1
+    restart = False
 
     #Event loop
     for event in pygame.event.get():
@@ -122,6 +129,8 @@ while True:
         if event.type == KEYDOWN:
             if event.key == K_SPACE:
                 jumping = True
+            if event.key == K_RETURN:
+                restart = True
 
     #some functionality
     game_over2(game_over)
@@ -145,5 +154,12 @@ while True:
             DISPLAYSURF.blit(x.image, x.rect)
         display_score()
         DISPLAYSURF.blit(rex.image, rex.rect)
+
+    if game_over and restart:
+        rex = trex(150)
+        FPS = 40
+        frame_counter = 0
+        game_over = False
+
     pygame.display.update()
     fpsClock.tick(FPS)
