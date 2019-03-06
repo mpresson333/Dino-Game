@@ -77,6 +77,10 @@ def game_over2(game_over):
         Rect = Surf.get_rect()
         Rect.topleft = (150, 150)
         DISPLAYSURF.blit(Surf, Rect)
+        Surf = BASICFONT.render("SCORE: " + str(frame_counter), 1, (0,0,0))
+        Rect = Surf.get_rect()
+        Rect.topleft = (10, 250)
+        DISPLAYSURF.blit(Surf, Rect)
 
 #Creates a text box with the text provided in location x, y on screen
 def display_message(text, x, y):
@@ -118,7 +122,8 @@ while True:
     #Fill in background
     DISPLAYSURF.fill(WHITE)
     pygame.draw.line(DISPLAYSURF, (0, 0, 0), (0, 190), (400, 190), 2)
-    frame_counter += 1
+    if not game_over:
+        frame_counter += 1
     restart = False
 
     #Event loop
