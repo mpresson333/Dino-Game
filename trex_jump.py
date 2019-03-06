@@ -153,6 +153,8 @@ while True:
             add_cloud()
 
     #Update display
+        pygame.draw.rect(DISPLAYSURF, (151, 236, 246), (0, 0, 400, 190))
+        pygame.draw.rect(DISPLAYSURF, (245, 207, 151), (0, 192, 400, 200))
         for plant in cacti:
             DISPLAYSURF.blit(plant.image, plant.rect)
         for x in clouds:
